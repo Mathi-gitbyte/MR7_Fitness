@@ -17,19 +17,19 @@ export default function HeroSection() {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
-        <span className="font-display font-black text-white tracking-[-0.01em] text-[clamp(120px,18vw,260px)] leading-none">
+        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(120px,18vw,260px)] leading-none">
           FITNESS
         </span>
       </motion.div>
 
       {/* "MR7" label + orange underline (z-[20]) */}
       <motion.div
-        className="absolute left-14 top-[33%] z-[20]"
+        className="absolute left-14 top-[45%] z-[20]"
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0, ease }}
       >
-        <span className="font-display font-black text-[4.5rem] tracking-[0.05em] uppercase text-[#FF5500] leading-none block">
+        <span className="font-display font-semibold text-[4.5rem] tracking-[0.25em] uppercase text-[#FF5500] leading-none block">
           MR7
         </span>
         <motion.div
@@ -42,7 +42,7 @@ export default function HeroSection() {
 
       {/* Orange ring circle (z-[2]) — entrance then infinite pulse */}
       <motion.div
-        className="absolute right-[-5%] top-[30%] z-[2]"
+        className="absolute top-[50%] z-[2]" style={{ right: 'calc(-5% + 4cm)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.5, ease }}

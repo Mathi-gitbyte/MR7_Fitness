@@ -3,7 +3,7 @@ import { Barlow_Condensed, Rajdhani } from "next/font/google";
 import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
-  weight: ["900"],
+  weight: ["400", "600", "700", "900"],
   subsets: ["latin"],
   variable: "--font-display",
 });
