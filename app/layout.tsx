@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Barlow_Condensed, Rajdhani } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
-// Inter used as the base sans font, exposed via --font-sans CSS variable
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const barlowCondensed = Barlow_Condensed({
+  weight: ["900"],
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const rajdhani = Rajdhani({
+  weight: ["400", "600"],
+  subsets: ["latin"],
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "MR7 Fitness",
@@ -13,12 +21,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={cn("font-sans", inter.variable)}>
-      <body className={inter.className}>{children}</body>
+    <html lang="en">
+      <body
+        className={`${barlowCondensed.variable} ${rajdhani.variable}`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
