@@ -8,6 +8,13 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 10, 10, 10;
   --background-end-rgb: 10, 10, 10;
+
+  /* MR7 brand custom properties */
+  --color-bg:     #0a0a0a;
+  --color-orange: #FF5500;
+  --color-white:  #FFFFFF;
+  --color-muted:  #555555;
+  --color-circle: rgba(120, 40, 10, 0.55);
 }
 
 @layer utilities {
@@ -92,7 +99,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: #0a0a0a;
+    color: white;
+    overflow-x: hidden;
   }
   html {
     @apply font-sans;
