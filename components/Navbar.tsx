@@ -85,6 +85,7 @@ export default function Navbar() {
         {/* Hamburger button */}
         <Button
           size="icon"
+          aria-label="Open menu"
           className="rounded-none bg-[#FF5500] hover:bg-[#FF5500] w-10 h-10 p-0 flex-shrink-0"
         >
           <Menu size={18} className="text-white" />
@@ -94,8 +95,9 @@ export default function Navbar() {
       {/* Fixed social icons — right edge, vertically centered */}
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-5">
         {SOCIAL.map(({ Icon, label }, i) => (
-          <motion.button
+          <motion.a
             key={label}
+            href="#"
             aria-label={label}
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
@@ -103,7 +105,7 @@ export default function Navbar() {
             className="text-white hover:opacity-100 transition-opacity"
           >
             <Icon size={18} />
-          </motion.button>
+          </motion.a>
         ))}
       </div>
     </>
