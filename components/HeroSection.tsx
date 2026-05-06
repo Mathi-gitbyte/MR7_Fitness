@@ -112,6 +112,7 @@ export default function HeroSection() {
           >
             EXPLORE
             <motion.span
+              aria-hidden="true"
               variants={{ hover: { x: 4 } }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
