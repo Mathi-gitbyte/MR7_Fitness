@@ -57,7 +57,7 @@ export default function Preloader() {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    const fallback = setTimeout(() => setVisible(false), 8000)
+    const fallback = setTimeout(() => setVisible(false), 3000)
     return () => clearTimeout(fallback)
   }, [])
 
@@ -184,7 +184,7 @@ export default function Preloader() {
                   x: '-180%',
                 }}
                 animate={{ x: '280%' }}
-                transition={{ duration: 0.65, delay: 2.9, ease: 'easeInOut' }}
+                transition={{ duration: 0.65, delay: 1.8, ease: 'easeInOut' }}
               />
             </div>
 
@@ -227,7 +227,7 @@ export default function Preloader() {
               style={{ backgroundColor: '#FF5500' }}
               initial={{ width: '0%' }}
               animate={{ width: '100%' }}
-              transition={{ duration: 7.5, ease: 'linear' }}
+              transition={{ duration: 2.8, ease: 'linear' }}
             />
           </motion.div>
         </>

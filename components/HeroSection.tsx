@@ -18,37 +18,42 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
 
       {/* "FITNESS" — massive text (z-[1]) */}
       <motion.div
-        className="absolute top-[53%] left-0 pl-12 z-[1] pointer-events-none select-none"
+        className="absolute top-[62%] left-0 pl-12 z-[1] pointer-events-none select-none"
         initial={{ x: -80, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
-        <span className="block font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white mb-[-50px] ml-[60px] mt-[-40px]">
+        <span className="absolute top-[-30px] left-[72px] font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white">
           UNISEX
         </span>
-        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(36px,5vw,72px)] leading-none">
+        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(48px,7vw,96px)] leading-none">
           FITNESS
         </span>
+      </motion.div>
 
-        {/* Buttons below FITNESS */}
-        <div className="flex gap-4 mt-6 pl-2 pointer-events-auto">
-          <motion.a
-            href="#programs"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-black text-center px-6 py-3 rounded-lg bg-[#FF5500] hover:bg-[#E64D00] transition-colors duration-200"
-          >
-            Explore Services
-          </motion.a>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-[#FF5500] text-center px-6 py-3 rounded-lg bg-transparent border border-[rgba(255,85,0,0.5)] hover:bg-[rgba(255,85,0,0.1)] hover:border-[#FF5500] transition-all duration-200"
-          >
-            Contact Us
-          </motion.a>
-        </div>
+      {/* Buttons — independently positioned below FITNESS text */}
+      <motion.div
+        className="absolute top-[80%] left-0 pl-14 z-[10] flex gap-4"
+        initial={{ x: -80, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.15, ease }}
+      >
+        <motion.a
+          href="#programs"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-black text-center px-6 py-3 rounded-lg bg-[#FF5500] hover:bg-[#E64D00] transition-colors duration-200"
+        >
+          Explore Services
+        </motion.a>
+        <motion.a
+          href="#contact"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-[#FF5500] text-center px-6 py-3 rounded-lg bg-transparent border border-[rgba(255,85,0,0.5)] hover:bg-[rgba(255,85,0,0.1)] hover:border-[#FF5500] transition-all duration-200"
+        >
+          Contact Us
+        </motion.a>
       </motion.div>
 
       {/* "MR7" label + orange underline (z-[20]) */}
@@ -126,9 +131,9 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
       </div>
 
       {/* Bottom-left subtitle (z-[30]) */}
-      <div className="absolute bottom-[8%] left-14 z-[30]">
+      <div className="absolute bottom-[4%] left-14 z-[30]">
         <motion.p
-          className="font-body font-normal text-sm text-[#555555] max-w-[260px] leading-relaxed"
+          className="font-body font-normal text-sm text-white max-w-[260px] leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7, ease }}
