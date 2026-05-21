@@ -16,30 +16,16 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const supabase = await createAdminSupabaseClient()
-  const formData = await req.formData()
-  const videoFile = formData.get('video') as File | null
-  const thumbnailFile = formData.get('thumbnail') as File | null
-  const title = (formData.get('title') as string) ?? ''
-  const sortOrder = parseInt((formData.get('sort_order') as string) ?? '0', 10)
+  const { title, video_url, video_public_id, thumbnail_url, sort_order } = await req.json()
 
-  if (!videoFile) return NextResponse.json({ error: 'No video file provided' }, { status: 400 })
+  if (!video_url) return NextResponse.json({ error: 'Missing video_url' }, { status: 400 })
 
-  const videoBuffer = Buffer.from(await videoFile.arrayBuffer())
-  const { url: videoUrl, publicId } = await uploadToCloudinary(videoBuffer, 'mr7-story-videos', 'video')
-
-  let thumbnailUrl = ''
-  if (thumbnailFile) {
-    const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer())
-    const { url } = await uploadToCloudinary(thumbBuffer, 'mr7-story-thumbnails', 'image')
-    thumbnailUrl = url
-  } else {
-    // Auto-generate thumbnail from Cloudinary video URL
-    thumbnailUrl = videoUrl.replace('/upload/', '/upload/so_0/').replace(/\.[^.]+$/, '.jpg')
-  }
+  // Auto-generate thumbnail from Cloudinary if not provided
+  const thumbUrl = thumbnail_url || video_url.replace('/upload/', '/upload/so_0/').replace(/\.[^.]+$/, '.jpg')
 
   const { data, error } = await supabase
     .from('story_videos')
-    .insert([{ title, video_url: videoUrl, thumbnail_url: thumbnailUrl, cloudinary_public_id: publicId, sort_order: sortOrder }])
+    .insert([{ title, video_url, thumbnail_url: thumbUrl, cloudinary_public_id: video_public_id ?? '', sort_order: sort_order ?? 0 }])
     .select()
     .single()
 

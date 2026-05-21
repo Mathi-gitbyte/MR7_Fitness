@@ -11,6 +11,33 @@ type HeroMedia = {
   cloudinary_public_id: string
 } | null
 
+async function uploadToCloudinary(file: File): Promise<{ url: string; publicId: string; type: string }> {
+  const isVideo = file.type.startsWith('video/')
+  const resource_type = isVideo ? 'video' : 'image'
+
+  const sigRes = await fetch('/api/admin/cloudinary-signature', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folder: 'mr7-hero', resource_type }),
+  })
+  const { signature, timestamp, api_key, cloud_name, folder } = await sigRes.json()
+
+  const fd = new FormData()
+  fd.append('file', file)
+  fd.append('api_key', api_key)
+  fd.append('timestamp', String(timestamp))
+  fd.append('signature', signature)
+  fd.append('folder', folder)
+
+  const uploadRes = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloud_name}/${resource_type}/upload`,
+    { method: 'POST', body: fd }
+  )
+  const data = await uploadRes.json()
+  if (data.error) throw new Error(data.error.message)
+  return { url: data.secure_url, publicId: data.public_id, type: resource_type }
+}
+
 export default function AdminHeroPage() {
   const [media, setMedia] = useState<HeroMedia>(null)
   const [loading, setLoading] = useState(true)
@@ -31,12 +58,15 @@ export default function AdminHeroPage() {
     if (!file) return
     setUploading(true)
     setError('')
-    const form = new FormData()
-    form.append('file', file)
     try {
-      const res = await fetch('/api/admin/hero', { method: 'POST', body: form })
+      const { url, publicId, type } = await uploadToCloudinary(file)
+      const res = await fetch('/api/admin/hero', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, public_id: publicId, type }),
+      })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'Upload failed')
+      if (!res.ok) throw new Error(data.error ?? 'Save failed')
       setMedia(data)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Upload failed')
@@ -78,7 +108,6 @@ export default function AdminHeroPage() {
         <div className="font-body text-sm text-[#555]">Loading…</div>
       ) : (
         <div className="flex flex-col gap-6 max-w-2xl">
-          {/* Current media preview */}
           {media ? (
             <div className="rounded-xl overflow-hidden border border-[#222] bg-[#111]">
               <div className="px-5 py-4 border-b border-[#1a1a1a] flex items-center justify-between">
@@ -100,19 +129,10 @@ export default function AdminHeroPage() {
               </div>
               <div className="p-4 bg-[#0d0d0d]">
                 {media.type === 'video' ? (
-                  <video
-                    src={media.url}
-                    controls
-                    className="w-full rounded-lg max-h-[400px] object-contain"
-                  />
+                  <video src={media.url} controls className="w-full rounded-lg max-h-[400px] object-contain" />
                 ) : (
                   <div className="relative w-full aspect-video">
-                    <Image
-                      src={media.url}
-                      alt="Hero media"
-                      fill
-                      className="object-contain rounded-lg"
-                    />
+                    <Image src={media.url} alt="Hero media" fill className="object-contain rounded-lg" />
                   </div>
                 )}
               </div>
@@ -124,7 +144,6 @@ export default function AdminHeroPage() {
             </div>
           )}
 
-          {/* Upload button */}
           <div>
             <input
               ref={fileInputRef}
@@ -143,10 +162,10 @@ export default function AdminHeroPage() {
               }`}
             >
               <Upload size={16} />
-              {uploading ? 'Uploading… (may take a moment)' : media ? 'Replace Media' : 'Upload Image or Video'}
+              {uploading ? 'Uploading directly to cloud… please wait' : media ? 'Replace Media' : 'Upload Image or Video'}
             </label>
             <p className="font-body text-xs text-[#555] mt-2 text-center">
-              Supported: JPG, PNG, WebP, MP4, MOV · Max ~100MB
+              Uploads go directly to Cloudinary — no size limit. Large videos may take a moment.
             </p>
           </div>
         </div>

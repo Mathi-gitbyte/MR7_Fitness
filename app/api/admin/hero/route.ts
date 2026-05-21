@@ -21,15 +21,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const supabase = await createAdminSupabaseClient()
-  const formData = await req.formData()
-  const file = formData.get('file') as File | null
+  const { url, public_id, type } = await req.json()
 
-  if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+  if (!url || !type) return NextResponse.json({ error: 'Missing url or type' }, { status: 400 })
 
-  // Delete existing hero media first
-  const { data: existing } = await supabase
-    .from('hero_media')
-    .select('id, cloudinary_public_id, type')
+  // Delete existing hero media from Cloudinary + DB
+  const { data: existing } = await supabase.from('hero_media').select('id, cloudinary_public_id, type')
   if (existing && existing.length > 0) {
     for (const item of existing) {
       if (item.cloudinary_public_id) {
@@ -39,13 +36,9 @@ export async function POST(req: NextRequest) {
     await supabase.from('hero_media').delete().neq('id', '00000000-0000-0000-0000-000000000000')
   }
 
-  const isVideo = file.type.startsWith('video/')
-  const buffer = Buffer.from(await file.arrayBuffer())
-  const { url, publicId } = await uploadToCloudinary(buffer, 'mr7-hero', isVideo ? 'video' : 'image')
-
   const { data, error } = await supabase
     .from('hero_media')
-    .insert([{ url, cloudinary_public_id: publicId, type: isVideo ? 'video' : 'image' }])
+    .insert([{ url, cloudinary_public_id: public_id ?? '', type }])
     .select()
     .single()
 

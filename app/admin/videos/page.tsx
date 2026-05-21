@@ -15,6 +15,34 @@ type StoryVideo = {
   sort_order: number
 }
 
+async function uploadToCloudinary(
+  file: File,
+  folder: string,
+  resource_type: 'image' | 'video'
+): Promise<{ url: string; publicId: string }> {
+  const sigRes = await fetch('/api/admin/cloudinary-signature', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folder, resource_type }),
+  })
+  const { signature, timestamp, api_key, cloud_name } = await sigRes.json()
+
+  const fd = new FormData()
+  fd.append('file', file)
+  fd.append('api_key', api_key)
+  fd.append('timestamp', String(timestamp))
+  fd.append('signature', signature)
+  fd.append('folder', folder)
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloud_name}/${resource_type}/upload`,
+    { method: 'POST', body: fd }
+  )
+  const data = await res.json()
+  if (data.error) throw new Error(data.error.message)
+  return { url: data.secure_url, publicId: data.public_id }
+}
+
 export default function AdminVideosPage() {
   const [videos, setVideos] = useState<StoryVideo[]>([])
   const [loading, setLoading] = useState(true)
@@ -41,24 +69,37 @@ export default function AdminVideosPage() {
     if (!title.trim()) { setError('Please enter a title'); return }
     setUploading(true)
     setError('')
-    const fd = new FormData()
-    fd.append('video', selectedVideo)
-    if (selectedThumb) fd.append('thumbnail', selectedThumb)
-    fd.append('title', title)
-    fd.append('sort_order', String(videos.length))
-    const res = await fetch('/api/admin/videos', { method: 'POST', body: fd })
-    if (!res.ok) {
-      const d = await res.json()
-      setError(d.error ?? 'Upload failed')
-    } else {
+    try {
+      const { url: video_url, publicId: video_public_id } = await uploadToCloudinary(
+        selectedVideo, 'mr7-story-videos', 'video'
+      )
+
+      let thumbnail_url = ''
+      if (selectedThumb) {
+        const { url } = await uploadToCloudinary(selectedThumb, 'mr7-story-thumbnails', 'image')
+        thumbnail_url = url
+      }
+
+      const res = await fetch('/api/admin/videos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, video_url, video_public_id, thumbnail_url, sort_order: videos.length }),
+      })
+      if (!res.ok) {
+        const d = await res.json()
+        throw new Error(d.error ?? 'Save failed')
+      }
       setTitle('')
       setSelectedVideo(null)
       setSelectedThumb(null)
       if (videoRef.current) videoRef.current.value = ''
       if (thumbRef.current) thumbRef.current.value = ''
       load()
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setUploading(false)
     }
-    setUploading(false)
   }
 
   async function deleteVideo(v: StoryVideo) {
@@ -97,10 +138,7 @@ export default function AdminVideosPage() {
       </div>
 
       {/* Upload area */}
-      <div
-        className="rounded-xl p-6 mb-8 flex flex-col gap-4"
-        style={{ backgroundColor: '#111', border: '1px solid #222' }}
-      >
+      <div className="rounded-xl p-6 mb-8 flex flex-col gap-4 bg-[#111] border border-[#222]">
         <p className="font-body font-semibold text-sm text-white uppercase tracking-wider">Upload New Video</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -139,17 +177,19 @@ export default function AdminVideosPage() {
 
         {error && <p className="font-body text-sm text-red-400">{error}</p>}
 
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={handleUpload}
-          disabled={uploading}
-          className="self-start flex items-center gap-2 px-6 py-2.5 rounded-lg font-body font-semibold text-sm text-black"
-          style={{ backgroundColor: '#FF5500' }}
-        >
-          <Upload size={16} />
-          {uploading ? 'Uploading…' : 'Upload Video'}
-        </motion.button>
+        <div className="flex flex-col gap-1">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={handleUpload}
+            disabled={uploading}
+            className="self-start flex items-center gap-2 px-6 py-2.5 rounded-lg font-body font-semibold text-sm text-black bg-[#FF5500] hover:bg-[#E64D00] disabled:bg-[#CC4400] transition-colors"
+          >
+            <Upload size={16} />
+            {uploading ? 'Uploading directly to cloud… please wait' : 'Upload Video'}
+          </motion.button>
+          <p className="font-body text-xs text-[#555]">Uploads go directly to Cloudinary — large videos are supported.</p>
+        </div>
       </div>
 
       {/* Video reel grid with drag-to-reorder */}
@@ -183,21 +223,17 @@ export default function AdminVideosPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        {/* Drag handle */}
                         <div {...drag.dragHandleProps} className="absolute top-2 right-8 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab text-white">
                           <GripVertical size={18} />
                         </div>
 
-                        {/* Delete */}
                         <button
                           onClick={() => deleteVideo(video)}
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-full p-1 text-white hover:bg-red-500"
-                          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-full p-1 text-white hover:bg-red-500 bg-black/60"
                         >
                           <Trash2 size={14} />
                         </button>
 
-                        {/* Title */}
                         <div className="absolute bottom-0 left-0 right-0 p-3">
                           <p className="font-display text-white text-sm uppercase">{video.title}</p>
                         </div>
