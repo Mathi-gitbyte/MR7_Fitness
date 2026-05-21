@@ -1,7 +1,3 @@
-'use client'
-
-export const dynamic = 'force-dynamic'
-
 import Link from 'next/link'
 import { CreditCard, ImageIcon, Video, Users } from 'lucide-react'
 
@@ -16,7 +12,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="font-display text-white text-4xl uppercase mb-2">Dashboard</h1>
-      <p className="font-body text-sm mb-10" style={{ color: '#888' }}>
+      <p className="font-body text-sm text-[#888888] mb-10">
         Welcome back. Manage your MR7 Unisex Fitness content below.
       </p>
 
@@ -25,20 +21,14 @@ export default function AdminDashboard() {
           <Link
             key={href}
             href={href}
-            className="rounded-xl p-6 flex flex-col gap-4 transition-all duration-200 group"
-            style={{ backgroundColor: '#111', border: '1px solid #222' }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#FF5500')}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#222')}
+            className="rounded-xl p-6 flex flex-col gap-4 bg-[#111] border border-[#222] hover:border-[#FF5500] transition-colors duration-200"
           >
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(255,85,0,0.12)' }}
-            >
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(255,85,0,0.12)]">
               <Icon size={20} color="#FF5500" />
             </div>
             <div>
               <h2 className="font-display text-white text-xl uppercase mb-1">{title}</h2>
-              <p className="font-body text-sm leading-relaxed" style={{ color: '#888' }}>{desc}</p>
+              <p className="font-body text-sm leading-relaxed text-[#888888]">{desc}</p>
             </div>
           </Link>
         ))}
