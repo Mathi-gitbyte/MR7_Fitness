@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play, X } from 'lucide-react'
+import { Play, X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -67,7 +67,12 @@ interface Props {
 
 export default function VideoSection({ videos = DEFAULT_VIDEOS }: Props) {
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const displayVideos = videos.length > 0 ? videos : DEFAULT_VIDEOS
+
+  function scroll(dir: 'left' | 'right') {
+    scrollRef.current?.scrollBy({ left: dir === 'left' ? -260 : 260, behavior: 'smooth' })
+  }
 
   return (
     <section id="video" className="py-24" style={{ backgroundColor: '#0f0f0f' }}>
@@ -90,14 +95,34 @@ export default function VideoSection({ videos = DEFAULT_VIDEOS }: Props) {
         </motion.div>
 
         {/* Reel cards — horizontal scroll */}
-        <motion.div
-          className="flex justify-center gap-4 overflow-x-auto pb-4 snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'none' }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={stagger}
-        >
+        <div className="relative">
+          {/* Left arrow */}
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center text-white hover:bg-[#FF5500] hover:border-[#FF5500] transition-colors duration-200"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          {/* Right arrow */}
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center text-white hover:bg-[#FF5500] hover:border-[#FF5500] transition-colors duration-200"
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+          <motion.div
+            ref={scrollRef}
+            className="flex justify-start gap-4 overflow-x-auto pb-4 snap-x snap-mandatory"
+            style={{ scrollbarWidth: 'none' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={stagger}
+          >
           {displayVideos.map((video) => (
             <motion.div
               key={video.id}
@@ -142,7 +167,8 @@ export default function VideoSection({ videos = DEFAULT_VIDEOS }: Props) {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Video Modal */}
