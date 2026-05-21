@@ -1,5 +1,12 @@
 import { createServerSupabaseClient } from './supabase-server'
 
+export type HeroMedia = {
+  id: string
+  url: string
+  type: 'image' | 'video'
+  cloudinary_public_id: string
+} | null
+
 export type Instructor = {
   id: string
   name: string
@@ -185,6 +192,23 @@ const DEFAULT_INSTRUCTORS: Instructor[] = [
     sort_order: 3,
   },
 ]
+
+export async function getHeroMedia(): Promise<HeroMedia> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return null
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data, error } = await supabase
+      .from('hero_media')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    if (error && error.code !== 'PGRST116') return null
+    return data ?? null
+  } catch {
+    return null
+  }
+}
 
 export async function getInstructors(): Promise<{ enabled: boolean; instructors: Instructor[] }> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {

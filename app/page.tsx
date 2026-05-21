@@ -8,21 +8,22 @@ import VideoSection from "@/components/sections/VideoSection";
 import Instructors from "@/components/sections/Instructors";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
-import { getPricingPlans, getGalleryItems, getStoryVideos, getInstructors } from "@/lib/data";
+import { getPricingPlans, getGalleryItems, getStoryVideos, getInstructors, getHeroMedia } from "@/lib/data";
 
 export default async function Home() {
-  const [plans, gallery, videos, instructorsData] = await Promise.all([
+  const [plans, gallery, videos, instructorsData, heroMedia] = await Promise.all([
     getPricingPlans(),
     getGalleryItems(),
     getStoryVideos(),
     getInstructors(),
+    getHeroMedia(),
   ]);
   const { enabled: instructorsEnabled, instructors } = instructorsData;
 
   return (
     <>
       <Navbar />
-      <HeroSection />
+      <HeroSection heroMedia={heroMedia} />
       <Courses />
       <Gallery items={gallery} />
       <Pricing plans={plans} />

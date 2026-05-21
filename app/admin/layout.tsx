@@ -3,11 +3,12 @@
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { LayoutDashboard, CreditCard, ImageIcon, Video, Users, LogOut } from 'lucide-react'
+import { LayoutDashboard, CreditCard, ImageIcon, Video, Users, LogOut, Tv } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 
 const NAV = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Hero', href: '/admin/hero', icon: Tv },
   { label: 'Pricing', href: '/admin/pricing', icon: CreditCard },
   { label: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
   { label: 'Videos', href: '/admin/videos', icon: Video },
