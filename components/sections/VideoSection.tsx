@@ -153,19 +153,15 @@ export default function VideoSection({ videos = DEFAULT_VIDEOS }: Props) {
                 style={{ boxShadow: 'inset 0 0 0 2px #FF5500' }}
               />
 
-              {/* Play button — centered */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              {/* Title + play button at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 flex items-center gap-3">
                 <motion.div
-                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
                   style={{ backgroundColor: 'rgba(255,85,0,0.9)' }}
                   whileHover={{ scale: 1.15 }}
                 >
-                  <Play size={18} className="text-black ml-0.5" fill="black" />
+                  <Play size={15} className="text-black ml-0.5" fill="black" />
                 </motion.div>
-              </div>
-
-              {/* Title at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 p-4">
                 <p className="font-display text-white text-base uppercase leading-tight">{video.title}</p>
               </div>
             </motion.div>
