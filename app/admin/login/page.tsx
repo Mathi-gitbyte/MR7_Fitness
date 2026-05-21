@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       setError(authError.message)
       setLoading(false)
     } else {
-      router.push('/admin')
+      window.location.href = '/admin'
     }
   }
 
