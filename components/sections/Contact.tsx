@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
@@ -138,22 +138,6 @@ export default function Contact() {
               >
                 Send Message
               </motion.button>
-
-              {/* WhatsApp CTA */}
-              <motion.a
-                href="https://wa.me/916383611051"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-5 py-4 rounded-lg font-body font-semibold text-sm transition-all"
-                style={{ backgroundColor: '#25D366', color: '#FFFFFF' }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1ebe5b')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#25D366')}
-              >
-                <MessageCircle size={18} />
-                WhatsApp
-              </motion.a>
             </div>
           </motion.div>
 

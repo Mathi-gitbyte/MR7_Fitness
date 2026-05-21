@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
@@ -54,9 +55,15 @@ function LogoClip({
 }
 
 export default function Preloader() {
-  const [visible, setVisible] = useState(true)
+  const pathname = usePathname()
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (pathname !== '/' && !pathname.startsWith('/admin')) return
+    const seen = sessionStorage.getItem('preloader_shown')
+    if (seen) return
+    sessionStorage.setItem('preloader_shown', '1')
+    setVisible(true)
     const fallback = setTimeout(() => setVisible(false), 3000)
     return () => clearTimeout(fallback)
   }, [])
@@ -165,60 +172,26 @@ export default function Preloader() {
                 delay={0.15}
               />
 
-              {/* ── Shimmer overlays (fire after assembly) ── */}
-              <motion.div
-                className="absolute inset-0 pointer-events-none z-20"
-                style={{
-                  background:
-                    'linear-gradient(110deg, transparent 15%, rgba(255,210,90,0.55) 50%, transparent 85%)',
-                  x: '-180%',
-                }}
-                animate={{ x: '280%' }}
-                transition={{ duration: 0.7, delay: 1.1, ease: 'easeInOut' }}
-              />
-              <motion.div
-                className="absolute inset-0 pointer-events-none z-20"
-                style={{
-                  background:
-                    'linear-gradient(110deg, transparent 15%, rgba(255,255,255,0.25) 50%, transparent 85%)',
-                  x: '-180%',
-                }}
-                animate={{ x: '280%' }}
-                transition={{ duration: 0.65, delay: 1.8, ease: 'easeInOut' }}
-              />
             </div>
 
-            {/* Gym name */}
+            {/* ── Full-screen shimmer overlays ── */}
             <motion.div
-              className="mt-8 flex flex-col items-center gap-2"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <p
-                className="font-display text-4xl md:text-5xl uppercase tracking-[0.3em]"
-                style={{ color: '#FF5500' }}
-              >
-                MR7
-              </p>
-              <motion.p
-                className="font-display text-sm md:text-base uppercase"
-                style={{ color: '#999999' }}
-                initial={{ opacity: 0, letterSpacing: '0.05em' }}
-                animate={{ opacity: 1, letterSpacing: '0.45em' }}
-                transition={{ duration: 0.8, delay: 1.9, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                UNISEX FITNESS
-              </motion.p>
-            </motion.div>
-
-            {/* Divider */}
+              className="fixed inset-0 pointer-events-none z-[9998]"
+              style={{
+                background: 'linear-gradient(110deg, transparent 20%, rgba(255,210,90,0.4) 50%, transparent 80%)',
+                x: '-100vw',
+              }}
+              animate={{ x: '100vw' }}
+              transition={{ duration: 0.8, delay: 1.1, ease: 'easeInOut' }}
+            />
             <motion.div
-              className="mt-6 h-[1px]"
-              style={{ backgroundColor: '#FF5500' }}
-              initial={{ width: 0 }}
-              animate={{ width: '120px' }}
-              transition={{ duration: 0.5, delay: 2.3, ease: 'easeOut' }}
+              className="fixed inset-0 pointer-events-none z-[9998]"
+              style={{
+                background: 'linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.2) 50%, transparent 80%)',
+                x: '-100vw',
+              }}
+              animate={{ x: '100vw' }}
+              transition={{ duration: 0.75, delay: 1.8, ease: 'easeInOut' }}
             />
 
             {/* Progress bar */}

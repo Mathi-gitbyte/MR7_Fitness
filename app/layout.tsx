@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Rajdhani } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
+import WhatsAppWidget from "@/components/WhatsAppWidget";
 
 const barlowCondensed = Barlow_Condensed({
   weight: ["400", "600", "700", "900"],
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <Preloader />
         {children}
+        <WhatsAppWidget />
       </body>
     </html>
   );
