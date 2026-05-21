@@ -10,6 +10,7 @@ import {
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
 import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "HOME",        href: "/"                    },
@@ -91,12 +92,13 @@ export default function Navbar() {
                       <a
                         href={link.href}
                         onClick={() => setActive(link.label)}
-                        className="relative font-body font-semibold text-sm tracking-[0.12em] uppercase cursor-pointer p-0 pb-1 no-underline
-                          after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#FF5500]
-                          after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300 after:ease-in-out"
-                        style={{ color: active === link.label ? "#FFFFFF" : "#888888" }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = "#FFFFFF"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = active === link.label ? "#FFFFFF" : "#888888"; }}
+                        className={cn(
+                          "relative font-body font-semibold text-sm tracking-[0.12em] uppercase cursor-pointer p-0 pb-1 no-underline transition-colors duration-200",
+                          "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#FF5500]",
+                          "after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300 after:ease-in-out",
+                          "hover:text-white",
+                          active === link.label ? "text-white" : "text-[#888888]"
+                        )}
                       >
                         {link.label}
                       </a>
@@ -151,13 +153,10 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06, duration: 0.3, ease }}
                 onClick={() => { setActive(link.label); setMenuOpen(false); }}
-                className="font-body font-semibold text-base tracking-[0.15em] uppercase no-underline border-b pb-4"
-                style={{
-                  color: active === link.label ? "#FF5500" : "#888888",
-                  borderColor: "#1a1a1a",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = "#FFFFFF"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = active === link.label ? "#FF5500" : "#888888"; }}
+                className={cn(
+                  "font-body font-semibold text-base tracking-[0.15em] uppercase no-underline border-b border-[#1a1a1a] pb-4 transition-colors duration-200 hover:text-white",
+                  active === link.label ? "text-[#FF5500]" : "text-[#888888]"
+                )}
               >
                 {link.label}
               </motion.a>

@@ -29,10 +29,7 @@ export default function HeroSection() {
             href="#programs"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-black text-center px-6 py-3 rounded-lg"
-            style={{ backgroundColor: '#FF5500' }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E64D00')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5500')}
+            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-black text-center px-6 py-3 rounded-lg bg-[#FF5500] hover:bg-[#E64D00] transition-colors duration-200"
           >
             Explore Services
           </motion.a>
@@ -40,10 +37,7 @@ export default function HeroSection() {
             href="#contact"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-center px-6 py-3 rounded-lg transition-all duration-200"
-            style={{ backgroundColor: 'transparent', color: '#FF5500', border: '1px solid rgba(255,85,0,0.5)' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,85,0,0.1)'; e.currentTarget.style.borderColor = '#FF5500'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,85,0,0.5)'; }}
+            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-[#FF5500] text-center px-6 py-3 rounded-lg bg-transparent border border-[rgba(255,85,0,0.5)] hover:bg-[rgba(255,85,0,0.1)] hover:border-[#FF5500] transition-all duration-200"
           >
             Contact Us
           </motion.a>
