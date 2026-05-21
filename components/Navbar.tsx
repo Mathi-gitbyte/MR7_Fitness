@@ -9,16 +9,17 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const NAV_LINKS = [
-  { label: "HOME",        href: "#"            },
-  { label: "ABOUT",       href: "#about"        },
-  { label: "INSTRUCTORS", href: "#instructors"  },
-  { label: "COURSES",     href: "#courses"      },
-  { label: "PRICING",     href: "#pricing"      },
-  { label: "GALLERY",     href: "#gallery"      },
-  { label: "CONTACT",     href: "#contact"      },
+  { label: "HOME",        href: "/"                    },
+  { label: "ABOUT",       href: "/#about"              },
+  { label: "INSTRUCTORS", href: "/#instructors"        },
+  { label: "PROGRAMS",    href: "/#programs"           },
+  { label: "PRICING",     href: "/#pricing"            },
+  { label: "GALLERY",     href: "/#gallery"            },
+  { label: "CAL CALC",    href: "/calculator"          },
+  { label: "CONTACT",     href: "/#contact"            },
 ];
 
 const SOCIAL = [
@@ -33,10 +34,15 @@ export default function Navbar() {
   const [active, setActive] = useState("");
   const [showLogo, setShowLogo] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowLogo(window.scrollY < window.innerHeight * 0.85);
+      const currentY = window.scrollY;
+      setShowLogo(currentY < window.innerHeight * 0.85);
+      setNavVisible(currentY < lastScrollY.current || currentY < 80);
+      lastScrollY.current = currentY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -47,8 +53,8 @@ export default function Navbar() {
       {/* Main navbar bar */}
       <motion.nav
         initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease }}
+        animate={{ y: navVisible ? 0 : -100, opacity: navVisible ? 1 : 0 }}
+        transition={{ duration: 0.35, ease }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5"
       >
         {/* Logo — visible only in hero section */}
@@ -58,24 +64,12 @@ export default function Navbar() {
           animate={{ opacity: showLogo ? 1 : 0, scale: showLogo ? 1 : 0.8, pointerEvents: showLogo ? "auto" : "none" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
-          <div
-            className="absolute inset-0 rounded-full blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"
-            style={{ backgroundColor: "#FF5500", transform: "scale(0.7)" }}
-          />
           <Image
-            src="/Logo_orange.png"
+            src="/MR7-LOGO-SVG.svg"
             alt="MR7 Fitness"
-            width={136}
-            height={136}
-            className="object-contain relative z-10 transition-all duration-500 group-hover:scale-105"
-            style={{ mixBlendMode: "multiply", filter: "saturate(1.3) brightness(1.0) contrast(1.05)" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter =
-                "saturate(1.5) brightness(1.1) contrast(1.1) drop-shadow(0 2px 10px rgba(255,85,0,0.8)) drop-shadow(0 0 24px rgba(255,85,0,0.4))";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.filter = "saturate(1.3) brightness(1.0) contrast(1.05)";
-            }}
+            width={80}
+            height={80}
+            className="object-contain relative z-10"
             priority
           />
         </motion.a>
@@ -116,26 +110,39 @@ export default function Navbar() {
           {/* Hamburger button */}
           <Button
             size="icon"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
             className="rounded-none bg-[#FF5500] hover:bg-[#FF5500] w-10 h-10 p-0 flex-shrink-0 -mt-1"
           >
-            {menuOpen ? <X size={18} className="text-white" /> : <Menu size={18} className="text-white" />}
+            <Menu size={18} className="text-black" />
           </Button>
         </div>
       </motion.nav>
 
-      {/* Mobile menu dropdown */}
+      {/* Mobile menu overlay — z-[60] covers the entire navbar */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease }}
-            className="fixed top-0 left-0 right-0 z-40 md:hidden flex flex-col pt-24 pb-8 px-8 gap-6"
-            style={{ backgroundColor: "rgba(10,10,10,0.97)", borderBottom: "1px solid #222222" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease }}
+            className="fixed inset-0 z-[60] flex flex-col px-8"
+            style={{ backgroundColor: "rgba(10,10,10,0.98)" }}
           >
+            {/* Close button row — mirrors navbar hamburger position */}
+            <div className="flex justify-end pt-5 pb-8">
+              <Button
+                size="icon"
+                aria-label="Close menu"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-none bg-[#FF5500] hover:bg-[#FF5500] w-10 h-10 p-0 flex-shrink-0"
+              >
+                <X size={18} className="text-black" />
+              </Button>
+            </div>
+
+            {/* Nav links */}
             {NAV_LINKS.map((link, i) => (
               <motion.a
                 key={link.label}

@@ -1,22 +1,26 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
 }
 
+const HOURS = [
+  { day: 'Monday – Saturday', time: '5:30 AM – 11:00 PM' },
+  { day: 'Sunday', time: '8:00 AM – 9:00 PM' },
+]
+
 const info = [
   {
     icon: MapPin,
     label: 'Address',
-    value: 'MR7 Fitness, 123 Sports Complex, Mumbai – 400001',
+    value: '45, Govindan Rd, Panneerselvam Nagar, West Mambalam, Chennai, TN 600033',
   },
-  { icon: Phone, label: 'Phone', value: '+91 98765 43210' },
+  { icon: Phone, label: 'Phone', value: '063 8361 1051' },
   { icon: Mail, label: 'Email', value: 'hello@mr7fitness.com' },
-  { icon: Clock, label: 'Hours', value: 'Mon–Sat: 5am–11pm  |  Sun: 6am–10pm' },
 ]
 
 const inputClass =
@@ -34,8 +38,7 @@ export default function Contact() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            'radial-gradient(ellipse at top left, rgba(255,85,0,0.05) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at top left, rgba(255,85,0,0.05) 0%, transparent 60%)',
         }}
       />
 
@@ -123,26 +126,44 @@ export default function Contact() {
               />
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="button"
-              className="w-full font-body font-semibold py-4 rounded-lg transition-colors text-white"
-              style={{ backgroundColor: '#FF5500' }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FF6B00')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5500')}
-            >
-              Send Message
-            </motion.button>
+            <div className="flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="button"
+                className="flex-1 font-body font-semibold py-4 rounded-lg transition-colors text-black"
+                style={{ backgroundColor: '#FF5500' }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E64D00')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5500')}
+              >
+                Send Message
+              </motion.button>
+
+              {/* WhatsApp CTA */}
+              <motion.a
+                href="https://wa.me/916383611051"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2 px-5 py-4 rounded-lg font-body font-semibold text-sm transition-all"
+                style={{ backgroundColor: '#25D366', color: '#FFFFFF' }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1ebe5b')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#25D366')}
+              >
+                <MessageCircle size={18} />
+                WhatsApp
+              </motion.a>
+            </div>
           </motion.div>
 
-          {/* Right — Info */}
+          {/* Right — Info + Map */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-6"
           >
             {info.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex gap-4">
@@ -161,13 +182,35 @@ export default function Contact() {
               </div>
             ))}
 
-            {/* Map embed */}
+            {/* Working Hours */}
+            <div className="flex gap-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: 'rgba(255,85,0,0.1)' }}
+              >
+                <Clock size={18} color="#FF5500" />
+              </div>
+              <div>
+                <p className="font-body text-xs tracking-wider uppercase mb-2" style={{ color: '#888888' }}>
+                  Working Hours
+                </p>
+                {HOURS.map(({ day, time }) => (
+                  <div key={day} className="flex justify-between gap-6 mb-1">
+                    <span className="font-body text-sm text-white">{day}</span>
+                    <span className="font-body text-sm" style={{ color: '#FF5500' }}>{time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Google Maps embed */}
             <iframe
-              src="https://www.openstreetmap.org/export/embed.html?bbox=72.8,18.9,72.9,19.1&layer=mapnik"
+              src="https://maps.google.com/maps?q=45+Govindan+Rd+Panneerselvam+Nagar+West+Mambalam+Chennai+Tamil+Nadu+600033&output=embed"
               className="w-full rounded-lg"
-              style={{ height: 200, border: '1px solid #333333' }}
+              style={{ height: 220, border: '1px solid #333333' }}
               loading="lazy"
-              title="MR7 Fitness location"
+              title="MR7 Unisex Fitness location"
+              allowFullScreen
             />
           </motion.div>
         </div>

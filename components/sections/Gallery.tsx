@@ -2,6 +2,8 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { Play } from 'lucide-react'
+import type { GalleryItem } from '@/lib/data'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
@@ -13,40 +15,22 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 }
 
-const images = [
-  {
-    src: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
-    alt: 'Gym interior',
-    className: 'lg:col-span-2 lg:row-span-2',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80',
-    alt: 'Training equipment',
-    className: '',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80',
-    alt: 'Athlete training',
-    className: '',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&q=80',
-    alt: 'Weight lifting',
-    className: '',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
-    alt: 'Workout session',
-    className: '',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1579758629938-03607ccdbaba?w=800&q=80',
-    alt: 'Gym floor',
-    className: '',
-  },
+const DEFAULT_ITEMS: GalleryItem[] = [
+  { id: 'g1', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Gym interior', sort_order: 0 },
+  { id: 'g2', url: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Training equipment', sort_order: 1 },
+  { id: 'g3', url: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Athlete training', sort_order: 2 },
+  { id: 'g4', url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Weight lifting', sort_order: 3 },
+  { id: 'g5', url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Workout session', sort_order: 4 },
+  { id: 'g6', url: 'https://images.unsplash.com/photo-1579758629938-03607ccdbaba?w=800&q=80', type: 'image', cloudinary_public_id: '', alt: 'Gym floor', sort_order: 5 },
 ]
 
-export default function Gallery() {
+interface Props {
+  items?: GalleryItem[]
+}
+
+export default function Gallery({ items = DEFAULT_ITEMS }: Props) {
+  const displayItems = items.length > 0 ? items : DEFAULT_ITEMS
+
   return (
     <section id="gallery" className="py-24" style={{ backgroundColor: '#0a0a0a' }}>
       <div className="max-w-7xl mx-auto px-6">
@@ -78,20 +62,38 @@ export default function Gallery() {
           viewport={{ once: true, margin: '-100px' }}
           variants={stagger}
         >
-          {images.map((img, i) => (
+          {displayItems.map((item, i) => (
             <motion.div
-              key={i}
+              key={item.id}
               variants={fadeUp}
-              className={`relative overflow-hidden rounded-lg group cursor-pointer ${img.className}`}
+              className={`relative overflow-hidden rounded-lg group cursor-pointer ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}
             >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                className="object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
-                unoptimized
-              />
-              {/* Orange border ring on hover */}
+              {item.type === 'video' ? (
+                <>
+                  <video
+                    src={item.url}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
+                    muted
+                    loop
+                    playsInline
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0 }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,85,0,0.8)' }}>
+                      <Play size={16} fill="black" className="text-black ml-0.5" />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Image
+                  src={item.url}
+                  alt={item.alt}
+                  fill
+                  className="object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
+                  unoptimized
+                />
+              )}
               <div
                 className="absolute inset-0 rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
                 style={{ boxShadow: 'inset 0 0 0 2px #FF5500' }}

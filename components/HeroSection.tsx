@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
@@ -17,9 +16,38 @@ export default function HeroSection() {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
+        <span className="block font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white mb-[-50px] ml-[60px]">
+          UNISEX
+        </span>
         <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(120px,18vw,260px)] leading-none">
           FITNESS
         </span>
+
+        {/* Buttons below FITNESS */}
+        <div className="flex gap-4 mt-6 pl-2 pointer-events-auto">
+          <motion.a
+            href="#programs"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-black text-center px-6 py-3 rounded-lg"
+            style={{ backgroundColor: '#FF5500' }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E64D00')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5500')}
+          >
+            Explore Services
+          </motion.a>
+          <motion.a
+            href="#contact"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            className="font-body font-semibold text-xs tracking-[0.1em] uppercase text-center px-6 py-3 rounded-lg transition-all duration-200"
+            style={{ backgroundColor: 'transparent', color: '#FF5500', border: '1px solid rgba(255,85,0,0.5)' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,85,0,0.1)'; e.currentTarget.style.borderColor = '#FF5500'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,85,0,0.5)'; }}
+          >
+            Contact Us
+          </motion.a>
+        </div>
       </motion.div>
 
       {/* "MR7" label + orange underline (z-[20]) */}
@@ -48,7 +76,7 @@ export default function HeroSection() {
         transition={{ duration: 0.8, delay: 0.5, ease }}
       >
         <motion.div
-          className="w-[500px] h-[500px] rounded-full border-2 border-[#FF5500]/40 bg-[radial-gradient(circle,rgba(180,60,10,0.3),transparent_70%)]"
+          className="w-[500px] h-[500px] rounded-full border-2 border-[#FF5500]/40 bg-[radial-gradient(circle,rgba(255,85,0,0.3),transparent_70%)]"
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -88,39 +116,18 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Bottom-left content: subtitle + Explore button (z-[30]) */}
+      {/* Bottom-left content: subtitle (z-[30]) */}
       <div className="absolute bottom-[8%] left-14 z-[30]">
         <motion.p
-          className="font-body font-normal text-sm text-[#555555] max-w-[260px] leading-relaxed mb-6"
+          className="font-body font-normal text-sm text-[#555555] max-w-[260px] leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7, ease }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim.
+          Chennai&apos;s premier unisex fitness destination — transform your body, elevate your life.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.85, ease }}
-        >
-          <motion.button
-            whileHover="hover"
-            className="font-body font-semibold text-sm tracking-[0.15em] uppercase text-white flex items-center gap-2 bg-transparent border-none cursor-pointer hover:text-[#FF5500] transition-colors p-0"
-          >
-            EXPLORE
-            <motion.span
-              aria-hidden="true"
-              variants={{ hover: { x: 4 } }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            >
-              <ChevronRight size={16} />
-            </motion.span>
-          </motion.button>
-        </motion.div>
       </div>
+
     </section>
   );
 }

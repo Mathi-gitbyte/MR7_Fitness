@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import Services from "@/components/sections/Services";
 import About from "@/components/sections/About";
 import Courses from "@/components/sections/Courses";
 import Gallery from "@/components/sections/Gallery";
@@ -9,20 +8,28 @@ import VideoSection from "@/components/sections/VideoSection";
 import Instructors from "@/components/sections/Instructors";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
+import { getPricingPlans, getGalleryItems, getStoryVideos, getInstructors } from "@/lib/data";
 
-export default function Home() {
+export default async function Home() {
+  const [plans, gallery, videos, instructorsData] = await Promise.all([
+    getPricingPlans(),
+    getGalleryItems(),
+    getStoryVideos(),
+    getInstructors(),
+  ]);
+  const { enabled: instructorsEnabled, instructors } = instructorsData;
+
   return (
     <>
       <Navbar />
       <HeroSection />
-      <Services />
-      <About />
       <Courses />
-      <Gallery />
-      <Pricing />
-      <VideoSection />
-      <Instructors />
+      <Gallery items={gallery} />
+      <Pricing plans={plans} />
+      <VideoSection videos={videos} />
+      {instructorsEnabled && <Instructors instructors={instructors} />}
       <Contact />
+      <About />
       <Footer />
     </>
   );

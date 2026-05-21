@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
+import type { PricingPlan } from '@/lib/data'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
@@ -13,22 +14,21 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.12 } },
 }
 
-const plans = [
+const DEFAULT_PLANS: PricingPlan[] = [
   {
+    id: 'default-1',
     name: 'Basic',
     price: '₹1,999',
-    featured: false,
-    features: [
-      'Full gym access',
-      'Locker room access',
-      'Basic equipment',
-      '2 group classes/month',
-    ],
+    period: '/month',
+    features: ['Full gym access', 'Locker room access', 'Basic equipment', '2 group classes/month'],
+    is_popular: false,
+    sort_order: 0,
   },
   {
+    id: 'default-2',
     name: 'Premium',
     price: '₹3,499',
-    featured: true,
+    period: '/month',
     features: [
       'Everything in Basic',
       'Unlimited group classes',
@@ -37,11 +37,14 @@ const plans = [
       'Priority booking',
       'Body composition scan',
     ],
+    is_popular: true,
+    sort_order: 1,
   },
   {
+    id: 'default-3',
     name: 'Elite',
     price: '₹5,999',
-    featured: false,
+    period: '/month',
     features: [
       'Everything in Premium',
       'Daily personal training',
@@ -52,10 +55,18 @@ const plans = [
       'Recovery lounge access',
       'Supplement guidance',
     ],
+    is_popular: false,
+    sort_order: 2,
   },
 ]
 
-export default function Pricing() {
+interface Props {
+  plans?: PricingPlan[]
+}
+
+export default function Pricing({ plans = DEFAULT_PLANS }: Props) {
+  const displayPlans = plans.length > 0 ? plans : DEFAULT_PLANS
+
   return (
     <section id="pricing" className="py-24" style={{ backgroundColor: '#111111' }}>
       <div className="max-w-7xl mx-auto px-6">
@@ -86,36 +97,35 @@ export default function Pricing() {
           viewport={{ once: true, margin: '-100px' }}
           variants={stagger}
         >
-          {plans.map((plan) => (
+          {displayPlans.map((plan) => (
             <motion.div
-              key={plan.name}
+              key={plan.id}
               variants={fadeUp}
               whileHover={{
                 y: -8,
-                boxShadow: plan.featured
+                boxShadow: plan.is_popular
                   ? '0 0 60px rgba(255,85,0,0.25)'
                   : '0 0 40px rgba(255,85,0,0.1)',
               }}
-              className={plan.featured ? 'lg:scale-105 lg:-mt-4 lg:-mb-4' : ''}
+              className={plan.is_popular ? 'lg:scale-105 lg:-mt-4 lg:-mb-4' : ''}
             >
               <div
                 className="rounded-xl p-8 relative flex flex-col gap-6 h-full"
                 style={{
                   backgroundColor: '#1a1a1a',
-                  border: plan.featured ? '2px solid #FF5500' : '1px solid #222222',
-                  boxShadow: plan.featured ? '0 0 60px rgba(255,85,0,0.15)' : 'none',
+                  border: plan.is_popular ? '2px solid #FF5500' : '1px solid #222222',
+                  boxShadow: plan.is_popular ? '0 0 60px rgba(255,85,0,0.15)' : 'none',
                 }}
               >
-                {plan.featured && (
+                {plan.is_popular && (
                   <span
-                    className="absolute -top-4 left-1/2 -translate-x-1/2 font-body font-semibold text-xs px-4 py-1 rounded-full uppercase tracking-widest text-white"
+                    className="absolute -top-4 left-1/2 -translate-x-1/2 font-body font-semibold text-xs px-4 py-1 rounded-full uppercase tracking-widest text-black"
                     style={{ backgroundColor: '#FF5500' }}
                   >
                     Most Popular
                   </span>
                 )}
 
-                {/* Plan name */}
                 <div>
                   <h3 className="font-display text-white text-2xl uppercase">{plan.name}</h3>
                   <div className="flex items-baseline gap-1 mt-3">
@@ -123,15 +133,13 @@ export default function Pricing() {
                       {plan.price}
                     </span>
                     <span className="font-body text-sm" style={{ color: '#888888' }}>
-                      /month
+                      {plan.period}
                     </span>
                   </div>
                 </div>
 
-                {/* Divider */}
                 <div style={{ borderTop: '1px solid #222222' }} />
 
-                {/* Features */}
                 <ul className="flex flex-col gap-3 flex-1">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
@@ -143,30 +151,25 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                {/* CTA */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full font-body font-semibold py-3 rounded-lg transition-all duration-200"
                   style={
-                    plan.featured
-                      ? { backgroundColor: '#FF5500', color: '#FFFFFF' }
-                      : {
-                          backgroundColor: 'transparent',
-                          color: '#FF5500',
-                          border: '1px solid #FF5500',
-                        }
+                    plan.is_popular
+                      ? { backgroundColor: '#FF5500', color: '#000000' }
+                      : { backgroundColor: 'transparent', color: '#FF5500', border: '1px solid #FF5500' }
                   }
                   onMouseEnter={(e) => {
-                    if (plan.featured) {
-                      e.currentTarget.style.backgroundColor = '#FF6B00'
+                    if (plan.is_popular) {
+                      e.currentTarget.style.backgroundColor = '#E64D00'
                     } else {
                       e.currentTarget.style.backgroundColor = '#FF5500'
-                      e.currentTarget.style.color = '#FFFFFF'
+                      e.currentTarget.style.color = '#000000'
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (plan.featured) {
+                    if (plan.is_popular) {
                       e.currentTarget.style.backgroundColor = '#FF5500'
                     } else {
                       e.currentTarget.style.backgroundColor = 'transparent'

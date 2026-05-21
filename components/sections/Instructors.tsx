@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Instagram, Linkedin } from 'lucide-react'
+import type { Instructor } from '@/lib/data'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
@@ -14,34 +15,11 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 }
 
-const trainers = [
-  {
-    name: 'Raj Kumar',
-    specialty: 'Strength & Conditioning',
-    bio: '10 years elite powerlifting coaching',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
-  },
-  {
-    name: 'Priya Sharma',
-    specialty: 'Nutrition & Weight Loss',
-    bio: 'Certified nutritionist, 500+ transformations',
-    image: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80',
-  },
-  {
-    name: 'Arjun Mehta',
-    specialty: 'CrossFit & HIIT',
-    bio: 'Former national athlete, CrossFit Level 3',
-    image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80',
-  },
-  {
-    name: 'Neha Patel',
-    specialty: 'Yoga & Flexibility',
-    bio: 'RYT-500 certified, mobility specialist',
-    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80',
-  },
-]
+interface Props {
+  instructors: Instructor[]
+}
 
-export default function Instructors() {
+export default function Instructors({ instructors }: Props) {
   return (
     <section id="instructors" className="py-24" style={{ backgroundColor: '#111111' }}>
       <div className="max-w-7xl mx-auto px-6">
@@ -72,9 +50,9 @@ export default function Instructors() {
           viewport={{ once: true, margin: '-100px' }}
           variants={stagger}
         >
-          {trainers.map((trainer) => (
+          {instructors.map((instructor) => (
             <motion.div
-              key={trainer.name}
+              key={instructor.id}
               variants={fadeUp}
               className="rounded-xl overflow-hidden group border"
               style={{ backgroundColor: '#1a1a1a', borderColor: '#222222' }}
@@ -82,8 +60,8 @@ export default function Instructors() {
               {/* Image */}
               <div className="relative overflow-hidden" style={{ height: 300 }}>
                 <Image
-                  src={trainer.image}
-                  alt={trainer.name}
+                  src={instructor.photo_url}
+                  alt={instructor.name}
                   fill
                   className="object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-500"
                   unoptimized
@@ -96,26 +74,26 @@ export default function Instructors() {
                     className="w-9 h-9 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: '#FF5500' }}
                   >
-                    <Instagram size={16} className="text-white" />
+                    <Instagram size={16} className="text-black" />
                   </a>
                   <a
                     href="#"
                     className="w-9 h-9 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: '#FF5500' }}
                   >
-                    <Linkedin size={16} className="text-white" />
+                    <Linkedin size={16} className="text-black" />
                   </a>
                 </div>
               </div>
 
               {/* Text */}
               <div className="p-6">
-                <h3 className="font-display text-white text-xl uppercase">{trainer.name}</h3>
+                <h3 className="font-display text-white text-xl uppercase">{instructor.name}</h3>
                 <p className="font-body font-semibold text-sm mt-1" style={{ color: '#FF5500' }}>
-                  {trainer.specialty}
+                  {instructor.specialty}
                 </p>
                 <p className="font-body text-sm mt-2" style={{ color: '#888888' }}>
-                  {trainer.bio}
+                  {instructor.summary}
                 </p>
               </div>
             </motion.div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed, Rajdhani } from "next/font/google";
 import "./globals.css";
+import Preloader from "@/components/Preloader";
 
 const barlowCondensed = Barlow_Condensed({
   weight: ["400", "600", "700", "900"],
@@ -15,8 +16,8 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "MR7 Fitness",
-  description: "MR7 Fitness - Push your limits",
+  title: "MR7 Unisex Fitness",
+  description: "MR7 Unisex Fitness — Chennai's premier gym. Gym, MMA, Zumba, Yoga, Kickboxing, Personal Training & more.",
 };
 
 export default function RootLayout({
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${barlowCondensed.variable} ${rajdhani.variable}`}
       >
+        <Preloader />
         {children}
       </body>
     </html>

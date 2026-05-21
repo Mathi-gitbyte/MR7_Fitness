@@ -2,11 +2,19 @@
 
 import { Facebook, Instagram, Twitter, Youtube, MapPin, Phone, Mail } from 'lucide-react'
 
-const quickLinks = ['Home', 'About', 'Courses', 'Pricing', 'Gallery', 'Instructors', 'Contact']
+const quickLinks = [
+  { label: 'Home', href: '#' },
+  { label: 'About', href: '#about' },
+  { label: 'Programs', href: '#programs' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Instructors', href: '#instructors' },
+  { label: 'Contact', href: '#contact' },
+]
 
 const contactInfo = [
-  { icon: MapPin, value: 'MR7 Fitness, 123 Sports Complex, Mumbai – 400001' },
-  { icon: Phone, value: '+91 98765 43210' },
+  { icon: MapPin, value: '45, Govindan Rd, Panneerselvam Nagar, West Mambalam, Chennai 600033' },
+  { icon: Phone, value: '063 8361 1051' },
   { icon: Mail, value: 'hello@mr7fitness.com' },
 ]
 
@@ -29,36 +37,34 @@ export default function Footer() {
           {/* Col 1 — Brand */}
           <div>
             <div className="mb-4">
-              <span className="font-display text-4xl uppercase" style={{ color: '#FF5500' }}>
+              <span className="font-display text-3xl uppercase" style={{ color: '#FF5500' }}>
                 MR7
               </span>
-              <span className="font-display text-4xl uppercase text-white ml-1">FITNESS</span>
+              <span className="font-display text-3xl uppercase text-white ml-1">UNISEX FITNESS</span>
             </div>
             <p className="font-body text-sm leading-relaxed" style={{ color: '#888888' }}>
               Push your limits. Build your legacy.
               <br />
-              Mumbai&apos;s premier destination for serious athletes and fitness enthusiasts.
+              Chennai&apos;s premier unisex destination for serious athletes and fitness enthusiasts.
             </p>
           </div>
 
           {/* Col 2 — Quick Links */}
           <div>
-            <h4
-              className="font-display text-white text-lg uppercase mb-6 tracking-wider"
-            >
+            <h4 className="font-display text-white text-lg uppercase mb-6 tracking-wider">
               Quick Links
             </h4>
             <ul className="flex flex-col gap-3">
               {quickLinks.map((link) => (
-                <li key={link}>
+                <li key={link.label}>
                   <a
-                    href={`#${link.toLowerCase()}`}
+                    href={link.href}
                     className="font-body text-sm transition-colors"
                     style={{ color: '#888888' }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#FF5500')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = '#888888')}
                   >
-                    {link}
+                    {link.label}
                   </a>
                 </li>
               ))}
@@ -117,7 +123,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="font-body text-sm" style={{ color: '#888888' }}>
-            © 2026 MR7 Fitness. All Rights Reserved.
+            © 2026 MR7 Unisex Fitness. All Rights Reserved.
           </p>
           <p className="font-body text-sm" style={{ color: '#888888' }}>
             Designed with passion for fitness.
