@@ -69,33 +69,42 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
         />
       </motion.div>
 
-      {/* Admin-uploaded hero media (z-[10]) */}
-      {heroMedia && (
+      {/* Admin-uploaded hero media */}
+      {heroMedia && heroMedia.type === "video" && (
+        <motion.div
+          className="absolute inset-0 z-[0]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3, ease }}
+        >
+          <video
+            src={heroMedia.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark overlay so text remains readable */}
+          <div className="absolute inset-0 bg-black/55" />
+        </motion.div>
+      )}
+
+      {heroMedia && heroMedia.type === "image" && (
         <motion.div
           className="absolute bottom-0 left-[38%] z-[10] h-[90vh]"
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.4, ease }}
         >
-          {heroMedia.type === "video" ? (
-            <video
-              src={heroMedia.url}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="h-full w-auto object-contain object-bottom"
-            />
-          ) : (
-            <Image
-              src={heroMedia.url}
-              alt="Hero"
-              width={700}
-              height={1050}
-              className="h-full w-auto object-contain object-bottom"
-              priority
-            />
-          )}
+          <Image
+            src={heroMedia.url}
+            alt="Hero"
+            width={700}
+            height={1050}
+            className="h-full w-auto object-contain object-bottom"
+            priority
+          />
         </motion.div>
       )}
 
