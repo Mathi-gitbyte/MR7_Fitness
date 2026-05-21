@@ -132,13 +132,16 @@ export default function VideoSection({ videos = DEFAULT_VIDEOS }: Props) {
               onClick={() => setActiveVideo(video.video_url)}
               transition={{ duration: 0.25 }}
             >
-              {/* Thumbnail */}
-              <Image
-                src={video.thumbnail_url}
-                alt={video.title}
-                fill
-                className="object-cover transition-all duration-500 group-hover:brightness-75"
-                unoptimized
+              {/* Autoplay video */}
+              <video
+                src={video.video_url}
+                poster={video.thumbnail_url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:brightness-75"
               />
 
               {/* Gradient */}
