@@ -26,7 +26,7 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
         <span className="block font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white mb-[-50px] ml-[60px]">
           UNISEX
         </span>
-        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(120px,18vw,260px)] leading-none">
+        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(60px,9vw,130px)] leading-none">
           FITNESS
         </span>
 
