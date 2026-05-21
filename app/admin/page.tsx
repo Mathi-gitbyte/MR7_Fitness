@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { CreditCard, ImageIcon, Video, Users } from 'lucide-react'
 
