@@ -23,7 +23,7 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
-        <span className="block font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white mb-3 ml-[60px]">
+        <span className="block font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white mb-[-50px] ml-[60px] mt-[-40px]">
           UNISEX
         </span>
         <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(36px,5vw,72px)] leading-none">
