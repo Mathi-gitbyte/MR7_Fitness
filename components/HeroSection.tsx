@@ -18,7 +18,7 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
 
       {/* "FITNESS" — massive text (z-[1]) */}
       <motion.div
-        className="absolute top-[68%] md:top-[62%] left-0 pl-12 z-[1] pointer-events-none select-none"
+        className="absolute top-[72%] md:top-[62%] left-0 pl-12 z-[1] pointer-events-none select-none"
         initial={{ x: -80, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
@@ -58,7 +58,7 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
 
       {/* "MR7" label + orange underline (z-[20]) */}
       <motion.div
-        className="absolute left-12 md:left-14 top-[66%] md:top-[60%] z-[20]"
+        className="absolute left-12 md:left-14 top-[70%] md:top-[60%] z-[20]"
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0, ease }}
