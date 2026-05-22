@@ -24,15 +24,6 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
     }
   }, [isMuted]);
 
-  // Try to unmute as soon as the video starts playing (autoplay requires muted initially)
-  const handlePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = false;
-    // If browser allowed it, update UI; otherwise it silently stays muted
-    setIsMuted(video.muted);
-  };
-
   const toggleMute = () => setIsMuted((prev) => !prev);
 
   return (
@@ -111,7 +102,6 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
             muted
             loop
             playsInline
-            onPlay={handlePlay}
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Dark overlay so text remains readable */}
