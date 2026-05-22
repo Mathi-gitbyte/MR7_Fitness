@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRef, useState, useEffect } from "react";
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
@@ -13,6 +14,27 @@ export type HeroMedia = {
 } | null;
 
 export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Sync muted state to DOM — React's `muted` prop doesn't update after render
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  // Try to unmute as soon as the video starts playing (autoplay requires muted initially)
+  const handlePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    // If browser allowed it, update UI; otherwise it silently stays muted
+    setIsMuted(video.muted);
+  };
+
+  const toggleMute = () => setIsMuted((prev) => !prev);
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#0a0a0a]">
 
@@ -23,7 +45,7 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
-        <span className="absolute top-[-18px] md:top-[-30px] left-[86px] md:left-[72px] font-body font-semibold text-sm md:text-2xl tracking-[0.3em] uppercase text-white">
+        <span className="absolute top-[-18px] md:top-[-30px] left-[124px] md:left-[72px] font-body font-semibold text-sm md:text-2xl tracking-[0.3em] uppercase text-white">
           UNISEX
         </span>
         <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(56px,13vw,96px)] leading-none">
@@ -83,15 +105,51 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
           transition={{ duration: 1, delay: 0.3, ease }}
         >
           <video
+            ref={videoRef}
             src={heroMedia.url}
             autoPlay
             muted
             loop
             playsInline
+            onPlay={handlePlay}
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Dark overlay so text remains readable */}
           <div className="absolute inset-0 bg-black/55" />
+        </motion.div>
+      )}
+
+      {/* Sound toggle — only when a video is active */}
+      {heroMedia && heroMedia.type === "video" && (
+        <motion.div
+          className="fixed bottom-8 right-[70px] z-[45]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.8, ease }}
+        >
+          <button
+            type="button"
+            onClick={toggleMute}
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
+            className="flex items-center gap-2 px-3 py-2 rounded-full bg-black/50 border border-white/20 hover:border-[#FF5500] hover:bg-black/70 text-white cursor-pointer transition-all duration-200"
+          >
+            {isMuted ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF5500" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+            <span className="font-body text-xs tracking-wide">
+              {isMuted ? "Unmute" : "Mute"}
+            </span>
+          </button>
         </motion.div>
       )}
 
