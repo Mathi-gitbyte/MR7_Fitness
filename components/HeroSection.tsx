@@ -23,17 +23,17 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
       >
-        <span className="absolute top-[-30px] left-[72px] font-body font-semibold text-2xl tracking-[0.3em] uppercase text-white">
+        <span className="absolute top-[-18px] md:top-[-30px] left-[48px] md:left-[72px] font-body font-semibold text-sm md:text-2xl tracking-[0.3em] uppercase text-white">
           UNISEX
         </span>
-        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(48px,7vw,96px)] leading-none">
+        <span className="font-display font-normal text-white tracking-[-0.01em] text-[clamp(56px,13vw,96px)] leading-none">
           FITNESS
         </span>
       </motion.div>
 
       {/* Buttons — independently positioned below FITNESS text */}
       <motion.div
-        className="absolute top-[80%] left-0 pl-14 z-[10] flex gap-4"
+        className="absolute top-[80%] left-0 pl-12 md:pl-14 z-[10] flex gap-4"
         initial={{ x: -80, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease }}
@@ -58,18 +58,18 @@ export default function HeroSection({ heroMedia }: { heroMedia: HeroMedia }) {
 
       {/* "MR7" label + orange underline (z-[20]) */}
       <motion.div
-        className="absolute left-14 top-[60%] z-[20]"
+        className="absolute left-12 md:left-14 top-[60%] z-[20]"
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0, ease }}
       >
-        <span className="font-display font-semibold text-[4.5rem] tracking-[0.25em] uppercase text-[#FF5500] leading-none block">
+        <span className="font-display font-semibold text-[2rem] md:text-[4.5rem] tracking-[0.25em] uppercase text-[#FF5500] leading-none block">
           MR7
         </span>
         <motion.div
           className="h-[3px] bg-[#FF5500] mt-1"
           initial={{ width: "0px" }}
-          animate={{ width: "80px" }}
+          animate={{ width: "60px" }}
           transition={{ duration: 0.5, delay: 0.3, ease }}
         />
       </motion.div>
